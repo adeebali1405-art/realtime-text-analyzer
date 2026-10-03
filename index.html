@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Real-Time Text Counter By Adeeb Ali Developer</title>
+    <style>
+        /* Advanced CSS3 Variables & Reset */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --radius: 16px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Advanced Glassmorphism Card */
+        main.counter-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 35px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 650px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header h1 {
+            font-size: 26px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 24px;
+            font-weight: 800;
+        }
+
+        .textarea-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        textarea.counter-textarea {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: 2px solid #cbd5e1;
+            font-size: 16px;
+            resize: vertical;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #ffffff;
+            color: var(--text-main);
+        }
+
+        textarea.counter-textarea:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        /* Advanced CSS Grid for Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .stat-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-color: #cbd5e1;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 24px;
+            font-weight: 700;
+            color: #4f46e5;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Action Buttons */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            flex: 2;
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background: #f1f5f9;
+            color: var(--text-muted);
+            border: 1px solid #cbd5e1;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+            color: var(--text-main);
+        }
+
+        /* Saved List Section */
+        section.list-section {
+            border-top: 2px dashed #e2e8f0;
+            padding-top: 20px;
+        }
+
+        .list-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--text-main);
+        }
+
+        ul.saved-list {
+            list-style: none;
+            max-height: 220px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        article.saved-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .item-content {
+            max-width: 75%;
+        }
+
+        .item-text {
+            font-size: 14px;
+            color: var(--text-main);
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #ef4444;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-delete:hover {
+            background: #fecaca;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="counter-card">
+        <header>
+            <h1>Advanced Text Analyzer  By Adeeb Ali Developer</h1>
+        </header>
+
+        <section>
+            <div class="textarea-wrapper">
+                <textarea 
+                    id="textInput" 
+                    class="counter-textarea" 
+                    placeholder="Type or paste your text here..." 
+                    rows="4"
+                ></textarea>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span id="charCount" class="stat-number">0</span>
+                    <span class="stat-label">Characters</span>
+                </div>
+                <div class="stat-box">
+                    <span id="wordCount" class="stat-number">0</span>
+                    <span class="stat-label">Words</span>
+                </div>
+                <div class="stat-box">
+                    <span id="sentenceCount" class="stat-number">0</span>
+                    <span class="stat-label">Sentences</span>
+                </div>
+                <div class="stat-box">
+                    <span id="readTime" class="stat-number">0 min</span>
+                    <span class="stat-label">Read Time</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="button-group">
+                <button id="addBtn" class="btn btn-primary">Save to List</button>
+                <button id="clearBtn" class="btn btn-secondary">Clear</button>
+            </div>
+        </section>
+
+        <!-- Saved Items List Section -->
+        <section class="list-section" id="listSection" style="display: none;">
+            <h3 class="list-title" id="listTitle">Saved Entries (0)</h3>
+            <ul id="savedList" class="saved-list"></ul>
+        </section>
+    </main>
+
+    <script>
+        // DOM Elements
+        const textInput = document.getElementById('textInput');
+        const charCount = document.getElementById('charCount');
+        const wordCount = document.getElementById('wordCount');
+        const sentenceCount = document.getElementById('sentenceCount');
+        const readTime = document.getElementById('readTime');
+        const addBtn = document.getElementById('addBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const savedList = document.getElementById('savedList');
+        const listSection = document.getElementById('listSection');
+        const listTitle = document.getElementById('listTitle');
+
+        // Load items from HTML5 LocalStorage on startup
+        let items = JSON.parse(localStorage.getItem('counter_saved_items')) || [];
+        renderList();
+
+        // Real-time Event Listener
+        textInput.addEventListener('input', updateStats);
+
+        function updateStats() {
+            const text = textInput.value;
+            
+            // Calculations
+            const chars = text.length;
+            const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+            const sentences = text.trim() === '' ? 0 : text.split(/[.!?]+/).filter(Boolean).length;
+            const minutes = Math.ceil(words / 200);
+
+            // Update UI
+            charCount.textContent = chars;
+            wordCount.textContent = words;
+            sentenceCount.textContent = sentences;
+            readTime.textContent = `${minutes} min`;
+        }
+
+        // Add item functionality
+        addBtn.addEventListener('click', () => {
+            const text = textInput.value.trim();
+            if (text === '') return;
+
+            const newItem = {
+                id: Date.now(),
+                text: text,
+                words: text.split(/\s+/).length,
+                chars: text.length
+            };
+
+            items.unshift(newItem); // Add to top
+            saveAndRender();
+            textInput.value = '';
+            updateStats();
+        });
+
+        // Clear functionality
+        clearBtn.addEventListener('click', () => {
+            textInput.value = '';
+            updateStats();
+        });
+
+        // Delete item functionality
+        window.deleteItem = function(id) {
+            items = items.filter(item => item.id !== id);
+            saveAndRender();
+        }
+
+        function saveAndRender() {
+            localStorage.setItem('counter_saved_items', JSON.stringify(items));
+            renderList();
+        }
+
+        function renderList() {
+            if (items.length === 0) {
+                listSection.style.display = 'none';
+                return;
+            }
+
+            listSection.style.display = 'block';
+            listTitle.textContent = `Saved Entries (${items.length})`;
+            
+            savedList.innerHTML = items.map(item => `
+                <article class="saved-item">
+                    <div class="item-content">
+                        <p class="item-text">"${item.text}"</p>
+                        <span class="item-meta">${item.words} words • ${item.chars} chars</span>
+                    </div>
+                    <button class="btn-delete" onclick="deleteItem(${item.id})">Delete</button>
+                </article>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
